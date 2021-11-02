@@ -22,7 +22,7 @@ myStream.on('open', function () {
     stdin.on('data', (data) => {
         info = data.toString().trim();
         if (info === 'exit') {
-            console.log('Exit?! Ok')
+            console.log('Exit?! Ok. The end')
             process.exit();
         }
         fs.open(way, 'a+', (err) => {
@@ -32,7 +32,7 @@ myStream.on('open', function () {
             })
         });
         function ctrlC() {
-            console.log('Ok. The end');
+            console.log('Ctrl+C??? Ok. The end');
             process.exit();
         }
         process.on('SIGINT', ctrlC);
