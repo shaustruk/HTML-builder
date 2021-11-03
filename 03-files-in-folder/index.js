@@ -17,7 +17,7 @@ const myStream = fs.createReadStream(__filename);//create stream
 myStream.on('open', function () {
     fs.readdir(way, (err, data) => {
         data.forEach(el => {
-            let fileName = path.join(__dirname + '/secret-folder/' + `${el}`);
+            let fileName = path.join(__dirname, 'secret-folder', `${el}`);
             fs.stat(fileName, (err, stats) => {
                 if (err) throw err;
                 if (stats.isFile() == true) {
