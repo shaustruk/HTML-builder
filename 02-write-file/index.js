@@ -16,21 +16,20 @@ myStream.on('open', function () {
     fs.open(way, 'a+', (err) => {
         if (err) throw err;
     });
-    process.stdout.write('Hello.Enter yout text...\n');   //in which case it is a Readable stream.
+    console.log('Hello.Enter yout text...\n');   //in which case it is a Readable stream.
     process.stdin.on('data', (data) => {                   //in which case it is a Writable stream.
         info = data.toString().trim();
         if (info === 'exit') {
-            console.log('Exit?! Ok. The end')
-            process.exit();
+            end();
         }
         fs.appendFile(way, info, (err) => {
             if (err) throw err;
         })
-        function ctrlC() {
-            console.log('Ctrl+C??? Ok. The end');
+        function end() {
+            console.log('Exit?! Ok. The end');
             process.exit();
         }
-        process.on('SIGINT', ctrlC);
+        process.on('SIGINT', end);
     });
 
 });
