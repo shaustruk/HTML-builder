@@ -1,9 +1,10 @@
+/*node 05-merge-styles*/
 const fs = require('fs');   //расширение д/работы с файловой системой
 const path = require('path'); //расширения д/работы с путями
 const wayToStyles = path.join(__dirname, 'styles');
 const wayTobandle = path.join(__dirname, 'project-dist', 'bundle.css');
 
-let myWriteStream = fs.createWriteStream(path.join(wayTobandle), 'utf-8');
+let myWriteStream = fs.createWriteStream(wayTobandle, 'utf-8');
 fs.readdir(wayToStyles, (err, array) => {
     if (err) throw err;
     array.forEach(el => {               //array with files

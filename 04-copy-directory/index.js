@@ -17,13 +17,28 @@ const fsPromises = fs.promises;
 const dirNameCopy = path.join(__dirname, 'files-copy');
 const dirNameOriginal = path.join(__dirname, 'files');
 
-myStream.on('open', function createDir() {
 
+fs.mkdir(dirNameCopy, { recursive: true }, err => {
+    if (err) throw err; // не удалось создать папку
+    console.log('Папка успешно создана');
+});
+fs.readdir(dirNameOriginal, (err, files) => {        //reading files in original folder
+    if (err) throw err;
+    files.forEach(el => {
+        //get name of files in original folder
+        fs.copyFile(path.join(dirNameOriginal, `${el}`), (path.join(dirNameCopy, `${el}`)), (err) => {
+            if (err) throw err;
+        });
+    })
+});
+
+/*
+myStream.on('open', function createDir() {
     fs.stat(dirNameCopy, function (err, stats) {
         if (!err) {
             fs.rm(dirNameCopy, { recursive: true }, (err) => {
                 if (err) throw err;
-                return createDir();                                       //dir found and we have to return fuction for create dir 
+                return createDir();                                       //dir found and we have to return fuction for create dir
             });
         }
         else {
@@ -35,16 +50,12 @@ myStream.on('open', function createDir() {
                         fs.copyFile(path.join(dirNameOriginal, `${el}`), (path.join(dirNameCopy, `${el}`)), (err) => {
                             if (err) throw err;
                         });
-
-
                     })
                 });
             }).catch(function () {
                 console.log('failed to create directory');
             });
-
         }
-
     });
-
 });
+*/
