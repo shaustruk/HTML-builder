@@ -21,7 +21,7 @@ myStream.on('open', function () {
             fs.stat(fileName, (err, stats) => {
                 if (err) throw err;
                 if (stats.isFile() == true) {
-                    console.log(`<${el.split('.').slice(0, 1)}>-<${((path.extname(el)).slice(1))}>-<${Math.ceil((stats.size) / 1000)} kb>`);
+                    console.log(`${el.split('.').slice(0, 1)} - ${((path.extname(el)).slice(1))} - ${Math.ceil((stats.size) / 1000)} kb`);
                 }
             });
 

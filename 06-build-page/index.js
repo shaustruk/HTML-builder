@@ -1,6 +1,8 @@
+const { RSA_NO_PADDING } = require('constants');
 const fs = require('fs');   //расширение д/работы с файловой системой
 const path = require('path'); //расширения д/работы с путями
 const readline = require('readline');
+const myStream = fs.createReadStream(__filename);//create stream
 /*from*/
 const wayToTemplate = path.join(__dirname, 'template.html');
 const wayToStyles = path.join(__dirname, 'styles');
@@ -10,6 +12,7 @@ const wayToProjectDist = path.join(__dirname, 'project-dist');
 const wayToIndexHTML = path.join(wayToProjectDist, 'index.html');
 const wayAssetsInProjectDist = path.join(wayToProjectDist, 'assets');
 /*components*/
+const waytoComponents = path.join(__dirname, 'components');
 const waytoHeader = path.join(__dirname, 'components', 'header.html');
 const waytoArticles = path.join(__dirname, 'components', 'articles.html');
 const waytofooter = path.join(__dirname, 'components', 'footer.html');
@@ -34,21 +37,16 @@ fs.open(path.join(wayToProjectDist, 'style.css'), 'w', (err) => {
     console.log('File created/style');
 });
 //read & write tags
-fs.readFile(wayToTemplate, 'utf8', function (error, data) {
+fs.readFile(wayToTemplate, 'utf8', function (error, data) {                   //get  template
     if (error) throw error; // ошибка чтения файла, если есть
-    //read header
-    fs.readFile(waytoHeader, 'utf8', function (error, header) {
+    fs.readdir(waytoComponents, 'utf8', function (error, el) {          //get  components of components
         if (error) throw error; // ошибка чтения файла, если есть
-        data = data.toString().replace(/{{header}}/, header);
-        //read articles
-        fs.readFile(waytoArticles, 'utf8', function (error, articles) {
-            if (error) throw error; // ошибка чтения файла, если есть
-            data = data.toString().replace(/{{articles}}/, articles);
-            //read footer
-            fs.readFile(waytofooter, 'utf8', function (error, footer) {
-                if (error) throw error; // ошибка чтения файла, если есть
-                data = data.toString().replace(/{{footer}}/, footer);
-                //write to file index.html
+        el.forEach(nameFileOftags => {                                                      //get name of tags
+            let n = `${nameFileOftags.split('.').slice(0, 1)}`;
+            let pattern = '{' + '{' + `${n}` + '}' + '}';
+            console.log(pattern, nameFileOftags);
+            fs.readFile(path.join(waytoComponents, `${nameFileOftags}`), 'utf8', function (error, partOfFile) {
+                data = data.toString().replace(`${pattern}`, partOfFile);
                 fs.writeFile(wayToIndexHTML, data, function (err) {
                     if (err) throw err;
                 });
@@ -56,6 +54,7 @@ fs.readFile(wayToTemplate, 'utf8', function (error, data) {
         });
     });
 });
+
 //create style.css
 fs.readdir(wayToStyles, (err, array) => {
     if (err) throw err;
@@ -74,6 +73,7 @@ fs.readdir(wayToStyles, (err, array) => {
         });
     });
 });
+
 //create assets
 createDirAssets();
 function createDirAssets() {
